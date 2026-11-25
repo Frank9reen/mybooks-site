@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="yandex-verification" content="986527cd2e51179a" />
   <title>Читать — Василиса и Левиафан</title>
   <meta name="description" content="Онлайн-чтение романа «Василиса и Левиафан»." />
   <link rel="icon" href="../assets/generated/brand-mark.jpg" />
@@ -41,9 +42,17 @@
           <button class="btn btn-ghost" id="font-up" type="button" title="Крупнее" style="min-height:2.2rem;padding:0.35rem 0.7rem">A+</button>
         </div>
       </div>
-      <article class="reader-article" id="reader-article">
-        <p>Загрузка текста…</p>
-      </article>
+      <div class="reader-body-row">
+        <aside class="reader-where" id="reader-where" aria-live="polite">
+          <div class="reader-where-kicker">Василиса сейчас</div>
+          <div class="reader-where-body" id="reader-where-body">
+            <div class="reader-where-place">—</div>
+          </div>
+        </aside>
+        <article class="reader-article" id="reader-article">
+          <p>Загрузка текста…</p>
+        </article>
+      </div>
       <div class="reader-nav-bottom">
         <button class="btn btn-ghost" id="prev-chapter" type="button">← Предыдущая</button>
         <button class="btn btn-primary" id="next-chapter" type="button">Следующая →</button>
@@ -63,7 +72,11 @@
     </div>
   </div>
 
-  <script src="../js/reader.js"></script>
+  <script src="../js/reader.js?v=2"></script>
   <script src="../js/book-metrics.js"></script>
+<!-- Yandex.Metrika counter -->
+<script src="../js/metrika.js" defer></script>
+<noscript><div><img src="https://mc.yandex.ru/watch/114670066" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </body>
 </html>

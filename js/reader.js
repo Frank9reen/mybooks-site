@@ -52,50 +52,119 @@
   // Crest icon only at metro stations — no community name labels in text.
   const FACTIONS = {
     engineers: {
+      name: "Инженеры",
       place: "м. Сокол",
       crest: "../assets/crests/engineers.jpg",
       stations: /[«"]Сокол[»"]|[«"]Аэропорт[»"]|[«"]Динамо[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Инженер|[«"]Сокол[»"]|[«"]Аэропорт[»"]|[«"]Динамо[»"]|Коршун/i,
     },
     free: {
+      name: "Свободные",
       place: "м. Мнёвники",
       crest: "../assets/crests/free.jpg",
       stations: /[«"]Мнёвники[»"]|[«"]Мневники[»"]|[«"]Народное Ополчение[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Свободн|[«"]Мнёвники[»"]|[«"]Мневники[»"]|[«"]Народное Ополчение[»"]|Вихрь/i,
     },
     medics: {
+      name: "Врачи-ядерщики",
       place: "м. Щукинская",
       crest: "../assets/crests/medics.jpg",
       stations: /[«"]Щукинская[»"]|[«"]Октябрьское поле[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Врач|[«"]Щукинская[»"]|[«"]Октябрьское поле[»"]|Геном/i,
     },
     thistle: {
+      name: "Чертополох",
       place: "м. Владыкино",
       crest: "../assets/crests/thistle.jpg",
       stations: /[«"]Владыкино[»"]|[«"]Петровско-Разумовская[»"]|[«"]Тимирязевская[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Чертополох|[«"]Владыкино[»"]|[«"]Петровско-Разумовская[»"]|Вереск/i,
     },
     circus: {
+      name: "Цирк",
       place: "м. Тверская",
       crest: "../assets/crests/circus.jpg",
       stations: /[«"]Тверская[»"]|[«"]Охотный ряд[»"]|[«"]Театральная[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Цирк|[«"]Тверская[»"]|[«"]Охотный ряд[»"]|[«"]Театральная[»"]|Арлекин/i,
     },
     printers: {
+      name: "Печатники",
       place: "м. Савёловская",
       crest: "../assets/crests/printers.jpg",
       stations: /[«"]Савёловская[»"]|[«"]Савеловская[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Печатник|[«"]Савёловская[»"]|[«"]Савеловская[»"]/i,
     },
     vodniki: {
+      name: "Водники",
       place: "м. Речной вокзал",
       crest: "../assets/crests/vodniki.jpg",
       stations: /[«"]Речной вокзал[»"]|[«"]Водный стадион[»"]|[«"]Войковская[»"]/gi,
+      arrive: /общин\w*\s+[«"«]?Водник|[«"]Речной вокзал[»"]|[«"]Водный стадион[»"]|[«"]Войковская[»"]/i,
     },
     boatmen: {
+      name: "Лодочники",
       place: "Москва-река",
       crest: "../assets/crests/boatmen.jpg",
       stations: /Москва-?рек\w*/gi,
+      arrive: /Лодочник|Помор|Жерех|Москва-?рек/i,
     },
     geologists: {
+      name: "Геологи",
       place: "Метро-2",
       crest: "../assets/crests/geologists.jpg",
       stations: /[«"]?Метро-2[»"]?/gi,
+      arrive: /Геолог|Метро-2|\bКрот\b/i,
     },
+  };
+
+  const SURFACE = {
+    name: "Поверхность",
+    place: "Москва",
+    crest: null,
+  };
+
+  // Default location when chapter opens (before finer scroll tracking).
+  const CHAPTER_AT = {
+    0: null,
+    1: null,
+    2: "engineers",
+    3: "engineers",
+    4: "free",
+    5: "medics",
+    6: "medics",
+    7: "thistle",
+    8: "thistle",
+    9: "circus",
+    10: "circus",
+  };
+
+  const whereBody = document.getElementById("reader-where-body");
+  let locObserver = null;
+  let currentLocId = null;
+
+  const detectLoc = (text) => {
+    for (const [id, f] of Object.entries(FACTIONS)) {
+      if (f.arrive?.test(text)) return id;
+    }
+    return null;
+  };
+
+  const locMeta = (id) => {
+    if (!id || id === "surface") return SURFACE;
+    return FACTIONS[id] || SURFACE;
+  };
+
+  const renderWhere = (id) => {
+    if (!whereBody) return;
+    currentLocId = id || "surface";
+    const f = locMeta(currentLocId);
+    const crest = f.crest
+      ? `<img class="reader-where-crest" src="${f.crest}" alt="" width="56" height="56" />`
+      : `<div class="reader-where-crest is-empty" aria-hidden="true"></div>`;
+    whereBody.innerHTML = `
+      ${crest}
+      <div class="reader-where-place">${escapeHtml(f.place)}</div>
+      <div class="reader-where-name">${escapeHtml(f.name)}</div>
+    `;
   };
 
   const crestImg = (f) =>
@@ -110,6 +179,31 @@
       out = out.replace(re, (m) => `${crestImg(f)}<span class="text-station">${m}</span>`);
     }
     return out;
+  };
+
+  const watchLocation = () => {
+    if (locObserver) {
+      locObserver.disconnect();
+      locObserver = null;
+    }
+    const nodes = [...articleEl.querySelectorAll("p[data-loc]")];
+    if (!nodes.length) {
+      renderWhere(CHAPTER_AT[index] || "surface");
+      return;
+    }
+    renderWhere(nodes[0].dataset.loc || "surface");
+    locObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (!visible.length) return;
+        const id = visible[0].target.dataset.loc || "surface";
+        if (id !== currentLocId) renderWhere(id);
+      },
+      { root: null, rootMargin: "-18% 0px -55% 0px", threshold: [0, 0.2, 0.6] }
+    );
+    nodes.forEach((n) => locObserver.observe(n));
   };
 
   const saveCelebrated = () => {
@@ -175,6 +269,7 @@
     hideDone();
     index = Math.max(0, Math.min(index, book.chapters.length - 1));
     const chapter = book.chapters[index];
+    let at = CHAPTER_AT[index] || "surface";
     const parts = [`<h2>${escapeHtml(chapter.title)}</h2>`];
 
     chapter.paragraphs.forEach((p) => {
@@ -182,7 +277,9 @@
         parts.push(`<div class="scene-break" aria-hidden="true">•••</div>`);
         return;
       }
-      parts.push(`<p>${decorateStations(p.text)}</p>`);
+      const hit = detectLoc(p.text);
+      if (hit) at = hit;
+      parts.push(`<p data-loc="${at}">${decorateStations(p.text)}</p>`);
     });
 
     parts.push(`<div class="chapter-end-mark" aria-hidden="true"></div>`);
@@ -199,6 +296,7 @@
     history.replaceState(null, "", url);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (progressEl) progressEl.style.width = `${((index + 1) / book.chapters.length) * 100}%`;
+    watchLocation();
     watchChapterEnd();
   };
 
