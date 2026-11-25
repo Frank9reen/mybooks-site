@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Читать — Василиса и Левиафан</title>
+  <meta name="description" content="Онлайн-чтение романа «Василиса и Левиафан»." />
+  <link rel="icon" href="../assets/generated/brand-mark.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="reader-body">
+  <div class="reader-shell">
+    <aside class="reader-sidebar">
+      <a class="back" href="../index.html">← На сайт</a>
+      <h1 id="reader-title">Василиса и Левиафан</h1>
+      <p id="reader-part" style="margin:0;color:var(--fog-dim);font-size:0.85rem">Загрузка…</p>
+      <div class="book-stats" data-book-stats="part1" data-live-reading style="margin:0.85rem 0 0.2rem">
+        <div class="book-stat">
+          <span class="book-stat-value" data-stat="reading">—</span>
+          <span class="book-stat-label">сейчас читают</span>
+        </div>
+        <div class="book-stat">
+          <span class="book-stat-value" data-stat="views">—</span>
+          <span class="book-stat-label">прочитали</span>
+        </div>
+      </div>
+      <p style="margin:0.8rem 0 0;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <a class="btn btn-ghost" style="min-height:2.2rem;padding:0.35rem 0.7rem;font-size:0.85rem" href="?part=1">Часть 1</a>
+        <span class="btn btn-locked" style="min-height:2.2rem;padding:0.35rem 0.7rem;font-size:0.85rem" aria-disabled="true">Часть 2 · скоро</span>
+      </p>
+      <nav class="chapter-nav" id="chapter-nav" aria-label="Главы"></nav>
+    </aside>
+    <div class="reader-main">
+      <div class="reader-toolbar">
+        <div class="reader-progress" aria-hidden="true"><span></span></div>
+        <div style="display:flex;gap:0.4rem">
+          <button class="btn btn-ghost" id="font-down" type="button" title="Мельче" style="min-height:2.2rem;padding:0.35rem 0.7rem">A−</button>
+          <button class="btn btn-ghost" id="font-up" type="button" title="Крупнее" style="min-height:2.2rem;padding:0.35rem 0.7rem">A+</button>
+        </div>
+      </div>
+      <article class="reader-article" id="reader-article">
+        <p>Загрузка текста…</p>
+      </article>
+      <div class="reader-nav-bottom">
+        <button class="btn btn-ghost" id="prev-chapter" type="button">← Предыдущая</button>
+        <button class="btn btn-primary" id="next-chapter" type="button">Следующая →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-done" id="chapter-done" hidden>
+    <div class="chapter-done-card" role="dialog" aria-modal="true" aria-labelledby="chapter-done-title">
+      <p class="chapter-done-kicker" id="chapter-done-kicker">Глава прочитана</p>
+      <h2 id="chapter-done-title">Так держать</h2>
+      <p id="chapter-done-text">Можно сразу идти дальше.</p>
+      <div class="chapter-done-actions">
+        <button class="btn btn-primary" type="button" id="chapter-done-next">Читать дальше →</button>
+        <button class="btn btn-ghost" type="button" id="chapter-done-close">Остаться здесь</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/reader.js"></script>
+  <script src="../js/book-metrics.js"></script>
+</body>
+</html>

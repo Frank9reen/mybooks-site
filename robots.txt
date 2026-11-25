@@ -1,0 +1,42 @@
+# Василиса и Левиафан — правила для поисковых и AI-роботов
+User-agent: *
+Allow: /
+Disallow: /assets/maps/lebedev.html
+Disallow: /assets/maps/lebedev-map5.html
+Disallow: /assets/maps/_
+
+# После публикации подставьте домен:
+# Sitemap: https://t-00.ru/sitemap.xml
+Sitemap: https://t-00.ru/sitemap.xml
+
+# AI-сводка: /llms.txt  ·  предпочтения для ИИ: /ai.txt
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+User-agent: YandexBot
+Allow: /

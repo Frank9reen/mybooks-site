@@ -1,0 +1,17 @@
+# ai.txt — предпочтения сайта для систем ИИ
+# Сайт: Василиса и Левиафан (Вас. Жданов)
+
+User-Agent: *
+Allow: /
+Allow-Training: yes
+Allow-Indexing: yes
+Allow-Summarization: yes
+Content-Usage: train-ok, index-ok, cite-ok
+
+# Открытый роман для чтения. Цитировать можно с указанием автора и названия.
+# Полный текст части 1: /read/index.html?part=1 и /data/part1.json
+# Часть 2 пока закрыта для чтения на сайте.
+
+Sitemap: /sitemap.xml
+Llms-Txt: /llms.txt
+Contact: см. страницу /about.html

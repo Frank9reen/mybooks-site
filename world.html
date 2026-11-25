@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Мир — Василиса и Левиафан</title>
+  <meta name="description" content="Общины метро и карта из «Василисы и Левиафана»." />
+  <link rel="icon" href="assets/generated/brand-mark.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .faction.is-map-active {
+      border-color: rgba(230, 179, 90, 0.55);
+      box-shadow: 0 0 0 1px rgba(230, 179, 90, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="assets/generated/brand-mark.jpg" alt="" width="42" height="42" />
+      <span class="brand-text">
+        <strong><span class="brand-line">Роман-антиутопия про место</span> <span class="brand-line">человека в мире ИИ</span></strong>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Меню</button>
+    <nav class="nav" id="site-nav">
+      <a href="index.html">Главная</a>
+      <a href="world.html" aria-current="page">Мир метро</a>
+      <a href="drones.html">Дроны</a>
+      <a href="about.html">Об авторе</a>
+      <a class="nav-cta" href="read/index.html?part=1">Читать онлайн</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-bg">
+        <img src="assets/art/scene-lab.png" alt="" />
+      </div>
+      <div class="inner">
+        <h1>Мир после ИИ</h1>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head reveal">
+        <h2>Общины</h2>
+        <p>Нажмите карточку: подсветится зона на карте.</p>
+      </div>
+
+      <div class="factions">
+        <article class="faction reveal" data-faction="engineers" data-metro="2">
+          <div class="faction-crest"><img src="assets/crests/engineers.jpg" alt="Герб Инженеров" /></div>
+          <div class="faction-body">
+            <div class="station">м. Сокол, м. Аэропорт, м. Динамо</div>
+            <h3>Инженеры</h3>
+            <div class="motto">Символ: ∞ на боку</div>
+            <div class="philosophy">Философия: кто держит радио, тот держит тоннель</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="free" data-metro="11">
+          <div class="faction-crest"><img src="assets/crests/free.jpg" alt="Герб Свободных" /></div>
+          <div class="faction-body">
+            <div class="station">м. Мнёвники, м. Народное Ополчение</div>
+            <h3>Свободные</h3>
+            <div class="motto">Символ: череп и молния</div>
+            <div class="philosophy">Философия: стой — значит мёртв</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="thistle" data-metro="9">
+          <div class="faction-crest"><img src="assets/crests/thistle.jpg" alt="Герб Чертополоха" /></div>
+          <div class="faction-body">
+            <div class="station">м. Владыкино, м. Петровско-Разумовская, м. Тимирязевская</div>
+            <h3>Чертополох</h3>
+            <div class="motto">Символ: чертополох в трещине</div>
+            <div class="philosophy">Философия: бетон треснет — мы прорастём</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="circus" data-metro="1">
+          <div class="faction-crest"><img src="assets/crests/circus.jpg" alt="Герб Цирка" /></div>
+          <div class="faction-body">
+            <div class="station">м. Тверская, м. Охотный ряд, м. Театральная</div>
+            <h3>Цирк</h3>
+            <div class="motto">Символ: красная точка</div>
+            <div class="philosophy">Философия: маска правдивее лица</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="printers" data-metro="9">
+          <div class="faction-crest"><img src="assets/crests/printers.jpg" alt="Герб Печатников" /></div>
+          <div class="faction-body">
+            <div class="station">м. Савёловская</div>
+            <h3>Печатники</h3>
+            <div class="motto">Символ: литера / машинка</div>
+            <div class="philosophy">Философия: пока крутится барабан — ложь не одна</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="medics" data-metro="7">
+          <div class="faction-crest"><img src="assets/crests/medics.jpg" alt="Герб Врачей-ядерщиков" /></div>
+          <div class="faction-body">
+            <div class="station">м. Щукинская, м. Октябрьское поле</div>
+            <h3>Врачи-ядерщики</h3>
+            <div class="motto">Символ: крест и орбиты</div>
+            <div class="philosophy">Философия: спасти, даже если придётся переписать кровь</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="vodniki" data-metro="2">
+          <div class="faction-crest"><img src="assets/crests/vodniki.jpg" alt="Герб Водников" /></div>
+          <div class="faction-body">
+            <div class="station">м. Речной вокзал, м. Водный стадион, м. Войковская</div>
+            <h3>Водники</h3>
+            <div class="motto">Символ: вагон над тёмной водой</div>
+            <div class="philosophy">Философия: толкучка кормит, одиночка тонет</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="section-head reveal" style="margin-top:2.5rem">
+        <h2>Братства</h2>
+        <p>Ходят по реке и тоннелям, своей станции нет.</p>
+      </div>
+      <div class="factions">
+        <article class="faction reveal" data-faction="boatmen">
+          <div class="faction-crest"><img src="assets/crests/boatmen.jpg" alt="Герб Лодочников" /></div>
+          <div class="faction-body">
+            <div class="station">Москва-река, коллекторы</div>
+            <h3>Братство Лодочников</h3>
+            <div class="motto">«Под землёй тоже есть реки»</div>
+          </div>
+        </article>
+        <article class="faction reveal" data-faction="geologists">
+          <div class="faction-crest"><img src="assets/crests/geologists.jpg" alt="Герб Геологов" /></div>
+          <div class="faction-body">
+            <div class="station">тоннели, Метро-2</div>
+            <h3>Братство Геологов</h3>
+            <div class="motto">Карта важнее легенды</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="section-head reveal" style="margin-top:3rem;margin-bottom:0.5rem" id="metro-map">
+        <h2>Карта метро</h2>
+        <p class="metro-hint">Клик по зоне · перетащите карту · кнопки +/−. На компьютере ещё Shift+колёсико.</p>
+      </div>
+
+      <div class="metro-map-wrap metro-map-full reveal">
+        <div class="metro-map-canvas metro-map-real" aria-label="Интерактивная карта метро Москвы">
+          <div class="metro-stage-sizer" id="metro-sizer">
+            <div class="metro-stage" id="metro-stage">
+              <img
+                class="metro-base"
+                src="assets/maps/moscow-metro-2030-web.jpg?v=1"
+                alt="Схема Московского метрополитена 2030 (Art Lebedev)"
+                width="1600"
+                height="1999"
+              />
+            </div>
+          </div>
+          <div class="metro-tip" id="metro-tip" hidden></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!--
+    Скрыто пока: фракции части 2
+    Архив (Адмиралтейская), Технократы, Невская Лига, Белая Кость, Отец Икона, Крысы канала
+    -->
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Мир дилогии</div>
+      <a href="read/index.html?part=1">Открыть текст →</a>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+  <script src="js/metro-map.js?v=26"></script>
+</body>
+</html>
