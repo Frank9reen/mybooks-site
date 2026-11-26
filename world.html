@@ -6,7 +6,10 @@
   <meta name="yandex-verification" content="986527cd2e51179a" />
   <title>Мир — Василиса и Левиафан</title>
   <meta name="description" content="Общины метро и карта из «Василисы и Левиафана»." />
-  <link rel="icon" href="assets/generated/brand-mark.jpg" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/generated/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/generated/favicon-16.png" />
+  <link rel="apple-touch-icon" href="assets/generated/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
@@ -147,16 +150,18 @@
       </div>
 
       <div class="metro-map-wrap metro-map-full reveal">
-        <div class="metro-map-canvas metro-map-real" aria-label="Интерактивная карта метро Москвы">
-          <div class="metro-stage-sizer" id="metro-sizer">
-            <div class="metro-stage" id="metro-stage">
-              <img
-                class="metro-base"
-                src="assets/maps/moscow-metro-2030-web.jpg?v=1"
-                alt="Схема Московского метрополитена 2030 (Art Lebedev)"
-                width="1600"
-                height="1999"
-              />
+        <div class="metro-map-shell metro-map-real" aria-label="Интерактивная карта метро Москвы">
+          <div class="metro-map-canvas" id="metro-canvas">
+            <div class="metro-stage-sizer" id="metro-sizer">
+              <div class="metro-stage" id="metro-stage">
+                <img
+                  class="metro-base"
+                  src="assets/maps/moscow-metro-2030-web.jpg?v=1"
+                  alt="Схема Московского метрополитена 2030 (Art Lebedev)"
+                  width="1600"
+                  height="1999"
+                />
+              </div>
             </div>
           </div>
           <div class="metro-tip" id="metro-tip" hidden></div>
@@ -179,7 +184,7 @@
     </div>
   </footer>
   <script src="js/main.js"></script>
-  <script src="js/metro-map.js?v=26"></script>
+  <script src="js/metro-map.js?v=30"></script>
 <!-- Yandex.Metrika counter -->
 <script src="js/metrika.js" defer></script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114670066" style="position:absolute; left:-9999px;" alt="" /></div></noscript>

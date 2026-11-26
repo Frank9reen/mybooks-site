@@ -6,7 +6,10 @@
   <meta name="yandex-verification" content="986527cd2e51179a" />
   <title>Читать — Василиса и Левиафан</title>
   <meta name="description" content="Онлайн-чтение романа «Василиса и Левиафан»." />
-  <link rel="icon" href="../assets/generated/brand-mark.jpg" />
+  <link rel="icon" href="../favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/generated/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/generated/favicon-16.png" />
+  <link rel="apple-touch-icon" href="../assets/generated/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet" />
@@ -18,14 +21,10 @@
       <a class="back" href="../index.html">← На сайт</a>
       <h1 id="reader-title">Василиса и Левиафан</h1>
       <p id="reader-part" style="margin:0;color:var(--fog-dim);font-size:0.85rem">Загрузка…</p>
-      <div class="book-stats" data-book-stats="part1" data-live-reading style="margin:0.85rem 0 0.2rem">
-        <div class="book-stat">
-          <span class="book-stat-value" data-stat="reading">—</span>
-          <span class="book-stat-label">сейчас читают</span>
-        </div>
-        <div class="book-stat">
-          <span class="book-stat-value" data-stat="views">—</span>
-          <span class="book-stat-label">прочитали</span>
+      <div class="reader-where" id="reader-where" aria-live="polite">
+        <div class="reader-where-kicker">Василиса сейчас</div>
+        <div class="reader-where-body" id="reader-where-body">
+          <div class="reader-where-place">—</div>
         </div>
       </div>
       <p style="margin:0.8rem 0 0;display:flex;gap:0.5rem;flex-wrap:wrap">
@@ -42,17 +41,9 @@
           <button class="btn btn-ghost" id="font-up" type="button" title="Крупнее" style="min-height:2.2rem;padding:0.35rem 0.7rem">A+</button>
         </div>
       </div>
-      <div class="reader-body-row">
-        <aside class="reader-where" id="reader-where" aria-live="polite">
-          <div class="reader-where-kicker">Василиса сейчас</div>
-          <div class="reader-where-body" id="reader-where-body">
-            <div class="reader-where-place">—</div>
-          </div>
-        </aside>
-        <article class="reader-article" id="reader-article">
-          <p>Загрузка текста…</p>
-        </article>
-      </div>
+      <article class="reader-article" id="reader-article">
+        <p>Загрузка текста…</p>
+      </article>
       <div class="reader-nav-bottom">
         <button class="btn btn-ghost" id="prev-chapter" type="button">← Предыдущая</button>
         <button class="btn btn-primary" id="next-chapter" type="button">Следующая →</button>
@@ -72,11 +63,10 @@
     </div>
   </div>
 
-  <script src="../js/reader.js?v=2"></script>
-  <script src="../js/book-metrics.js"></script>
 <!-- Yandex.Metrika counter -->
-<script src="../js/metrika.js" defer></script>
+<script src="../js/metrika.js"></script>
 <noscript><div><img src="https://mc.yandex.ru/watch/114670066" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+  <script src="../js/reader.js?v=5"></script>
 </body>
 </html>

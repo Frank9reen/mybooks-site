@@ -122,7 +122,6 @@
     crest: null,
   };
 
-  // Default location when chapter opens (before finer scroll tracking).
   const CHAPTER_AT = {
     0: null,
     1: null,
@@ -170,7 +169,6 @@
   const crestImg = (f) =>
     `<img class="text-crest" src="${f.crest}" alt="" width="28" height="28" loading="lazy" title="${escapeHtml(f.place)}" />`;
 
-  // Crest before metro station names only; no community name labels.
   const decorateStations = (text) => {
     let out = escapeHtml(text);
     for (const f of Object.values(FACTIONS)) {
@@ -216,18 +214,112 @@
     document.body.classList.remove("chapter-done-open");
   };
 
+  const CHAPTER_DONE = [
+    {
+      kicker: "Глава прочитана",
+      title: "Так держать",
+      text: (next) => `Дальше — «${next}». Не отпускайте Василису.`,
+    },
+    {
+      kicker: "Ещё одна позади",
+      title: "Фонарь не гаснет",
+      text: (next) => `Впереди «${next}». Шаг за шагом по тоннелю.`,
+    },
+    {
+      kicker: "Дочитали",
+      title: "Хороший темп",
+      text: (next) => `Следом идёт «${next}». Можно сразу.`,
+    },
+    {
+      kicker: "Глава закрыта",
+      title: "Вы дышите ровно",
+      text: (next) => `Дальше по рельсам: «${next}».`,
+    },
+    {
+      kicker: "Отметка на карте",
+      title: "Не сбились",
+      text: (next) => `Следующая станция текста — «${next}».`,
+    },
+    {
+      kicker: "Конец главы",
+      title: "Пауза или дальше",
+      text: (next) => `«${next}» уже ждёт. Василиса тоже.`,
+    },
+    {
+      kicker: "Прочитано",
+      title: "Тоннель длинный",
+      text: (next) => `Но и эта глава сдалась. Дальше — «${next}».`,
+    },
+    {
+      kicker: "Глава за главой",
+      title: "Держитесь линии",
+      text: (next) => `Сейчас на очереди «${next}».`,
+    },
+    {
+      kicker: "Ещё кусок пути",
+      title: "Можно выдохнуть",
+      text: (next) => `А потом — «${next}», без лишних остановок.`,
+    },
+    {
+      kicker: "Глава сдана",
+      title: "Сигнал зелёный",
+      text: (next) => `Едем дальше: «${next}».`,
+    },
+  ];
+
+  const PART_DONE = [
+    {
+      kicker: "Часть 1 прочитана",
+      title: "Дочитали до края",
+      text: "Часть 2 пока закрыта. Можно вернуться к любой главе или на сайт.",
+    },
+    {
+      kicker: "Часть 1 закрыта",
+      title: "Конец тоннеля на сегодня",
+      text: "Вторая часть ещё на замке. Листайте назад или выходите на сайт.",
+    },
+    {
+      kicker: "Вы дошли",
+      title: "Пока это всё",
+      text: "Часть 2 скоро. Пока можно перечитать любимую главу.",
+    },
+  ];
+
+  const pickDone = (list, seed) => list[Math.abs(seed) % list.length];
+
+  const reachGoal = (name, params) => {
+    if (typeof window.vlGoal === "function") window.vlGoal(name, params);
+    else {
+      window.vlGoalQueue = window.vlGoalQueue || [];
+      window.vlGoalQueue.push([name, params]);
+    }
+  };
+
   const showDone = () => {
     if (!doneRoot || !book || celebrated.has(index)) return;
     celebrated.add(index);
     saveCelebrated();
     const last = index >= book.chapters.length - 1;
-    const nextTitle = last ? "" : book.chapters[index + 1].title;
-    if (doneKicker) doneKicker.textContent = last ? "Часть 1 прочитана" : "Глава прочитана";
-    if (doneTitle) doneTitle.textContent = last ? "Дочитали до края" : "Так держать";
-    if (doneText) {
-      doneText.textContent = last
-        ? "Часть 2 пока закрыта. Можно вернуться к любой главе или на сайт."
-        : `Дальше — «${nextTitle}». Не отпускайте Василису.`;
+    const chapter = book.chapters[index];
+    reachGoal("chapter_complete", {
+      part,
+      chapter: index,
+      title: chapter?.title || "",
+    });
+    if (last && part === 1) {
+      reachGoal("part1_complete", { part, chapters: book.chapters.length });
+    }
+    if (last) {
+      const done = pickDone(PART_DONE, index + book.chapters.length);
+      if (doneKicker) doneKicker.textContent = done.kicker;
+      if (doneTitle) doneTitle.textContent = done.title;
+      if (doneText) doneText.textContent = done.text;
+    } else {
+      const nextTitle = book.chapters[index + 1].title;
+      const done = pickDone(CHAPTER_DONE, index);
+      if (doneKicker) doneKicker.textContent = done.kicker;
+      if (doneTitle) doneTitle.textContent = done.title;
+      if (doneText) doneText.textContent = done.text(nextTitle);
     }
     if (doneNext) {
       doneNext.hidden = last;
@@ -296,6 +388,15 @@
     history.replaceState(null, "", url);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (progressEl) progressEl.style.width = `${((index + 1) / book.chapters.length) * 100}%`;
+    const openKey = `vl-ym-ch-open-${part}-${index}`;
+    if (!sessionStorage.getItem(openKey)) {
+      sessionStorage.setItem(openKey, "1");
+      reachGoal("chapter_open", {
+        part,
+        chapter: index,
+        title: chapter.title || "",
+      });
+    }
     watchLocation();
     watchChapterEnd();
   };
@@ -361,6 +462,10 @@
       partEl.textContent = `Часть ${part} · ${data.chapters.length} глав`;
       buildNav();
       applyFont();
+      if (!sessionStorage.getItem("vl-ym-reader-open")) {
+        sessionStorage.setItem("vl-ym-reader-open", "1");
+        reachGoal("reader_open", { part });
+      }
       renderChapter();
     })
     .catch((err) => {

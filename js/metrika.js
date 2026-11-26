@@ -15,7 +15,9 @@
     a.parentNode.insertBefore(k, a);
 })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=114670066", "ym");
 
-ym(114670066, "init", {
+var VL_METRIKA_ID = 114670066;
+
+ym(VL_METRIKA_ID, "init", {
   ssr: true,
   webvisor: true,
   clickmap: true,
@@ -25,3 +27,31 @@ ym(114670066, "init", {
   accurateTrackBounce: true,
   trackLinks: true,
 });
+
+window.vlGoalQueue = window.vlGoalQueue || [];
+
+window.vlGoal = function (name, params) {
+  if (!name) return;
+  try {
+    if (typeof ym === "function") {
+      if (params) ym(VL_METRIKA_ID, "reachGoal", name, params);
+      else ym(VL_METRIKA_ID, "reachGoal", name);
+    } else {
+      window.vlGoalQueue.push([name, params]);
+    }
+  } catch (err) {
+    /* ignore */
+  }
+};
+
+(function flushGoalQueue() {
+  var q = window.vlGoalQueue || [];
+  if (!q.length || typeof ym !== "function") return;
+  window.vlGoalQueue = [];
+  q.forEach(function (item) {
+    var name = item[0];
+    var params = item[1];
+    if (params) ym(VL_METRIKA_ID, "reachGoal", name, params);
+    else ym(VL_METRIKA_ID, "reachGoal", name);
+  });
+})();

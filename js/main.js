@@ -25,4 +25,18 @@
   } else {
     reveals.forEach((el) => el.classList.add("is-visible"));
   }
+
+  // CTA → читалка
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href*="read/index.html"], a[href*="read/index.html?"]');
+    if (!a) return;
+    const href = a.getAttribute("href") || "";
+    if (!/read\/index\.html/.test(href)) return;
+    if (typeof window.vlGoal === "function") {
+      window.vlGoal("read_cta_click", { href });
+    } else {
+      window.vlGoalQueue = window.vlGoalQueue || [];
+      window.vlGoalQueue.push(["read_cta_click", { href }]);
+    }
+  });
 })();

@@ -1,9 +1,10 @@
 (() => {
   const stage = document.getElementById("metro-stage");
   const sizer = document.getElementById("metro-sizer");
-  const canvas = stage?.closest(".metro-map-canvas");
+  const canvas = document.getElementById("metro-canvas") || stage?.closest(".metro-map-canvas");
+  const shell = canvas?.closest(".metro-map-shell") || canvas?.parentElement;
   const tip = document.getElementById("metro-tip");
-  if (!stage || !canvas || !sizer) return;
+  if (!stage || !canvas || !sizer || !shell) return;
 
   const MAP_W = 1600;
   const MAP_H = 1999;
@@ -21,18 +22,21 @@
         { x: 27.8, y: 27.5, label: "Войковская" },
       ],
       crest: "assets/crests/vodniki.jpg",
+      blurb: "Толкучка кормит, одиночка тонет",
     },
     engineers: {
       name: "Инженеры",
       stations: "м. Сокол, м. Аэропорт, м. Динамо",
       color: "rgba(79, 176, 79, 0.38)",
       stroke: "#4fb04f",
+      // одна прямая по зелёной ветке
       points: [
         { x: 27.9, y: 31.0, label: "Сокол" },
-        { x: 32.1, y: 32.3, label: "Аэропорт" },
+        { x: 31.9, y: 33.3, label: "Аэропорт" },
         { x: 35.9, y: 35.6, label: "Динамо" },
       ],
       crest: "assets/crests/engineers.jpg",
+      blurb: "Кто держит радио, тот держит тоннель",
     },
     medics: {
       name: "Врачи-ядерщики",
@@ -44,6 +48,7 @@
         { x: 20.0, y: 32.4, label: "Октябрьское поле" },
       ],
       crest: "assets/crests/medics.jpg",
+      blurb: "Спасти, даже если придётся переписать кровь",
     },
     free: {
       name: "Свободные",
@@ -55,6 +60,7 @@
         { x: 18.6, y: 38.3, label: "Народное Ополчение" },
       ],
       crest: "assets/crests/free.jpg",
+      blurb: "Стой — значит мёртв",
     },
     thistle: {
       name: "Чертополох",
@@ -62,11 +68,13 @@
       color: "rgba(162, 165, 180, 0.36)",
       stroke: "#a2a5b4",
       points: [
-        { x: 53.2, y: 18.6, label: "Владыкино" },
-        { x: 48.7, y: 20.2, label: "Петровско-Разумовская" },
-        { x: 46.0, y: 24.7, label: "Тимирязевская" },
+        // серая линия 9: Владыкино → Петровско → изгиб к Тимирязевской
+        { x: 48.8, y: 18.1, label: "Владыкино" },
+        { x: 48.3, y: 20.2, label: "Петровско-Разумовская" },
+        { x: 45.8, y: 24.6, label: "Тимирязевская" },
       ],
       crest: "assets/crests/thistle.jpg",
+      blurb: "Бетон треснет — мы прорастём",
     },
     printers: {
       name: "Печатники",
@@ -74,9 +82,10 @@
       color: "rgba(162, 165, 180, 0.36)",
       stroke: "#a2a5b4",
       points: [
-        { x: 47.6, y: 31.2, label: "Савёловская" },
+        { x: 47.5, y: 31.1, label: "Савёловская" },
       ],
       crest: "assets/crests/printers.jpg",
+      blurb: "Пока крутится барабан — ложь не одна",
     },
     circus: {
       name: "Цирк",
@@ -89,22 +98,9 @@
         { x: 51.0, y: 51.0, label: "Театральная" },
       ],
       crest: "assets/crests/circus.jpg",
+      blurb: "Маска правдивее лица",
     },
-    boatmen: {
-      name: "Лодочники",
-      tipName: "Братство Лодочников",
-      stations: "Москва-река, коллекторы",
-      color: "rgba(40, 90, 120, 0.28)",
-      stroke: "#5aa0c8",
-      points: [
-        { x: 22.0, y: 55.0, label: "река · запад" },
-        { x: 34.0, y: 58.0, label: "коллектор" },
-        { x: 46.0, y: 61.0, label: "река · центр" },
-      ],
-      crest: "assets/crests/boatmen.jpg",
-      soft: true,
-      labelOffset: { x: -0.04, y: 0.02 },
-    },
+    // boatmen: зона временно снята — координаты по реке неточные
     geologists: {
       name: "Геологи",
       tipName: "Братство Геологов",
@@ -119,6 +115,7 @@
       crest: "assets/crests/geologists.jpg",
       soft: true,
       labelOffset: { x: 0.04, y: -0.01 },
+      blurb: "Идут туда, где карта молчит",
     },
   };
 
@@ -155,7 +152,7 @@
     <button type="button" data-zoom="out" aria-label="Отдалить">−</button>
     <button type="button" data-zoom="reset" aria-label="Сбросить">⌂</button>
   `;
-  canvas.appendChild(controls);
+  shell.appendChild(controls);
 
   const setScale = (next, anchorX, anchorY) => {
     const prev = scale;
@@ -266,6 +263,7 @@
       <div>
         <strong>${f.tipName || f.name}</strong>
         <span>${f.stations}</span>
+        ${f.blurb ? `<p>${f.blurb}</p>` : ""}
       </div>
     `;
     layer.querySelectorAll(".metro-zone").forEach((el) => {
@@ -289,7 +287,32 @@
     labels.querySelectorAll(".metro-zone-label").forEach((el) => el.classList.remove("is-active"));
   };
 
-  // Corridor hull around station chain (pixel space on 1600×1999).
+  // Corridor hull around station chain (pixel space on 1600×1999), with rounded corners.
+  const roundPoly = (poly, radius = 12) => {
+    if (poly.length < 3) return "";
+    const n = poly.length;
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+      const prev = poly[(i - 1 + n) % n];
+      const cur = poly[i];
+      const next = poly[(i + 1) % n];
+      const d0x = cur[0] - prev[0];
+      const d0y = cur[1] - prev[1];
+      const d1x = next[0] - cur[0];
+      const d1y = next[1] - cur[1];
+      const len0 = Math.hypot(d0x, d0y) || 1;
+      const len1 = Math.hypot(d1x, d1y) || 1;
+      const r = Math.min(radius, len0 / 2.2, len1 / 2.2);
+      const p1 = [cur[0] - (d0x / len0) * r, cur[1] - (d0y / len0) * r];
+      const p2 = [cur[0] + (d1x / len1) * r, cur[1] + (d1y / len1) * r];
+      if (i === 0) parts.push(`M ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`);
+      else parts.push(`L ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`);
+      parts.push(`Q ${cur[0].toFixed(1)} ${cur[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`);
+    }
+    parts.push("Z");
+    return parts.join(" ");
+  };
+
   const hullPath = (pts, pad = 18) => {
     if (pts.length === 1) {
       const p = pts[0];
@@ -303,7 +326,15 @@
       const len = Math.hypot(dx, dy) || 1;
       const ox = (-dy / len) * pad;
       const oy = (dx / len) * pad;
-      return `M ${a.x + ox} ${a.y + oy} L ${b.x + ox} ${b.y + oy} L ${b.x - ox} ${b.y - oy} L ${a.x - ox} ${a.y - oy} Z`;
+      // Capsule: straight sides + semicircle caps.
+      return [
+        `M ${(a.x + ox).toFixed(1)} ${(a.y + oy).toFixed(1)}`,
+        `L ${(b.x + ox).toFixed(1)} ${(b.y + oy).toFixed(1)}`,
+        `A ${pad.toFixed(1)} ${pad.toFixed(1)} 0 0 1 ${(b.x - ox).toFixed(1)} ${(b.y - oy).toFixed(1)}`,
+        `L ${(a.x - ox).toFixed(1)} ${(a.y - oy).toFixed(1)}`,
+        `A ${pad.toFixed(1)} ${pad.toFixed(1)} 0 0 1 ${(a.x + ox).toFixed(1)} ${(a.y + oy).toFixed(1)}`,
+        "Z",
+      ].join(" ");
     }
     const left = [];
     const right = [];
@@ -319,7 +350,7 @@
       right.push([pts[i].x - ox, pts[i].y - oy]);
     }
     const seq = [...left, ...right.reverse()];
-    return `M ${seq.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(" L ")} Z`;
+    return roundPoly(seq, Math.max(10, pad * 0.85));
   };
 
   Object.entries(factions).forEach(([id, f]) => {
@@ -333,6 +364,8 @@
     path.setAttribute("fill", f.color);
     path.setAttribute("stroke", f.stroke);
     path.setAttribute("stroke-width", f.soft ? "1.2" : "1.5");
+    path.setAttribute("stroke-linejoin", "round");
+    path.setAttribute("stroke-linecap", "round");
     g.appendChild(path);
 
     if (pts.length > 1) {
@@ -379,7 +412,7 @@
     btn.type = "button";
     btn.className = `metro-zone-label${f.soft ? " is-soft" : ""}`;
     btn.dataset.faction = id;
-    btn.textContent = f.name;
+    btn.textContent = f.tipName || f.name;
     btn.style.left = `${(mid.x + off.x) * 100}%`;
     btn.style.top = `${(mid.y + off.y) * 100}%`;
     btn.addEventListener("pointerenter", () => showTip(id, false));
